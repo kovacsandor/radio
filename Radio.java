@@ -7,7 +7,9 @@ package radio;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -86,8 +88,51 @@ public class Radio {
             }
         }
 
-
 //        5. A rögzített üzenetek alapján kísérelje meg helyreállítani az expedíció által küldött üzenetet! Készítse el az adaas.txt fájlt, amely napok szerinti sorrendben tartalmazza a küldött üzeneteket! Ha egy időpontban senkinél nem volt vétel, akkor azon a ponton a # jel szerepeljen! (Feltételezheti, hogy az azonos üzenethez tartozó feljegyzések között nincs ellentmondás.)
+        for (int i = 0; i < rogzitesekNapokSzerint.size(); i++) {
+            System.out.println(rogzitesekNapokSzerint.get(i).uzenet);
+        }
+        System.out.println("5. feladat:");
+
+        PrintWriter adaas = new PrintWriter(new FileWriter("adaas.txt"));
+        int nedikNap = 1;
+        int nedikKarakter = 0;
+        boolean karakterBeallitva = false;
+
+        for (int i = 0; i < rogzitesekNapokSzerint.size(); i++) {
+            if (nedikNap > 12) {
+                break;
+            }
+            if (nedikKarakter == 90) {
+                i = 0;
+                nedikKarakter = 0;
+                nedikNap++;
+                System.out.println("");
+                continue;
+            }
+
+            if (rogzitesekNapokSzerint.get(i).nap == nedikNap) {
+                String karakter = String.valueOf(rogzitesekNapokSzerint.get(i).uzenet.charAt(nedikKarakter));
+                if (!karakter.equals("#")) {
+                    System.out.print(karakter);
+                    karakterBeallitva = true;
+                    nedikKarakter++;
+                    continue;
+                }
+            }
+            if (rogzitesekNapokSzerint.get(i).nap > nedikNap) {
+                if (!karakterBeallitva) {
+                    System.out.print("#");
+                    
+                }
+                karakterBeallitva = false;
+                i = 0;
+//                nedikKarakter++;
+                
+            }
+        }
+
+        adaas.close();
 //        6. Készítsen függvényt szame néven az alábbi algoritmus alapján! A függvény egy karaktersorozathoz hozzárendeli az igaz vagy a hamis értéket. A függvény elkészítésekor az algoritmusban megadott változóneveket használja! Az elkészített függvényt a következő feladat megoldásánál felhasználhatja. 
 //        7. Olvassa be egy nap és egy rádióamatőr sorszámát, majd írja a képernyőre a megfigyelt egyedek számát (a kifejlett és kölyök egyedek számának összegét)! Ha nem volt ilyen feljegyzés, a „Nincs ilyen feljegyzés” szöveget jelenítse meg! Ha nem volt megfigyelt egyed vagy számuk nem állapítható meg, a „Nincs információ” szöveget jelenítse meg! Amennyiben egy számot közvetlenül # jel követ, akkor a számot tekintse nem megállapíthatónak! 
 //        for (int i = 0; i < rogzitesek.size(); i++) {
