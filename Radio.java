@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -107,14 +108,14 @@ public class Radio {
                 i = 0;
                 nedikKarakter = 0;
                 nedikNap++;
-                System.out.println("");
+                adaas.println("");
                 continue;
             }
 
             if (rogzitesekNapokSzerint.get(i).nap == nedikNap) {
                 String karakter = String.valueOf(rogzitesekNapokSzerint.get(i).uzenet.charAt(nedikKarakter));
                 if (!karakter.equals("#")) {
-                    System.out.print(karakter);
+                    adaas.print(karakter);
                     karakterBeallitva = true;
                     nedikKarakter++;
                     continue;
@@ -122,7 +123,7 @@ public class Radio {
             }
             if (rogzitesekNapokSzerint.get(i).nap > nedikNap) {
                 if (!karakterBeallitva) {
-                    System.out.print("#");
+                    adaas.print("#");
                     
                 }
                 karakterBeallitva = false;
@@ -133,13 +134,66 @@ public class Radio {
         }
 
         adaas.close();
+        
+        
 //        6. Készítsen függvényt szame néven az alábbi algoritmus alapján! A függvény egy karaktersorozathoz hozzárendeli az igaz vagy a hamis értéket. A függvény elkészítésekor az algoritmusban megadott változóneveket használja! Az elkészített függvényt a következő feladat megoldásánál felhasználhatja. 
+        
+        
 //        7. Olvassa be egy nap és egy rádióamatőr sorszámát, majd írja a képernyőre a megfigyelt egyedek számát (a kifejlett és kölyök egyedek számának összegét)! Ha nem volt ilyen feljegyzés, a „Nincs ilyen feljegyzés” szöveget jelenítse meg! Ha nem volt megfigyelt egyed vagy számuk nem állapítható meg, a „Nincs információ” szöveget jelenítse meg! Amennyiben egy számot közvetlenül # jel követ, akkor a számot tekintse nem megállapíthatónak! 
+        System.out.println("7. feladat:");
+        int egyNapSorszama = Integer.parseInt(getInput("Adja meg a nap sorszámát! "));
+        int egyRadioAmatorSorszama = Integer.parseInt(getInput("Adja meg a rádióamatőr sorszámát! "));
+//        char egyNapSorszama = getInput("Adja meg a nap sorszámát! ").charAt(0);
+//        char egyRadioAmatorSorszama = getInput("Adja meg a nap sorszámát! ").charAt(0);
+        String szo = "";
+        int megfigyeltEgyedekSzama = 0;
+        for (int i = 0; i < rogzitesek.size(); i++) {
+            if (rogzitesek.get(i).nap == egyNapSorszama && rogzitesek.get(i).radioAmator == egyRadioAmatorSorszama) {
+                szo = rogzitesek.get(i).uzenet.substring(0, 5);
+            }
+        }
+        System.out.println("szo = " + szo);
+
+        String kar1 = "";
+        String kar2 = "";
+        boolean elsoBeallitva = false;
+        for (int i = 0; i < szo.length(); i++) {
+            
+            if (szo.charAt(i) == ' ' ) {
+                System.out.println(kar1 + " + " + kar2);
+                break;
+            } else if (szo.charAt(i) == '#' ) {
+                System.out.println("Nem megállapítható");
+                break;
+            } else if (szo.charAt(i) == '/') {
+                elsoBeallitva = true;
+            } else if (szo.charAt(i)>'0' || szo.charAt(i)<'9') {
+                if(elsoBeallitva) {
+                    kar2 += szo.charAt(i);
+                } else {
+                    kar1 += szo.charAt(i);
+                }
+            } 
+        }
+               
+
+//        szame(uzenet);
+        
 //        for (int i = 0; i < rogzitesek.size(); i++) {
 //            System.out.println(rogzitesek.get(i).nap + ". nap, " + rogzitesek.get(i).radioAmator + " sz. rádióamatőr \n" + "Üzenet: " + rogzitesek.get(i).uzenet);
 //        }
     }
 
+    private static boolean szame(String szo) {
+        boolean valasz = true;
+        for (int i = 0; i < szo.length(); i++) {
+            if (szo.charAt(i)<'0' || szo.charAt(i)>'9') {
+                valasz = false;
+            }
+        }
+        return valasz;
+    }
+    
     private static class Rogzites {
 
         int nap;
@@ -153,4 +207,16 @@ public class Radio {
         }
     }
 
+    private static String getInput(String prompt) {
+        BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.print(prompt);
+        System.out.flush();
+
+        try {
+            return stdin.readLine();
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
 }
